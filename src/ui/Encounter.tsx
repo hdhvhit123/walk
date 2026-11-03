@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import type { Mission } from '../core/missions';
 import type { AreaPack } from '../core/pack';
-import { claimEarnings } from '../core/village';
+import { claimRewards, resourceName, type Cost } from '../core/village';
 import { allClaims, collection } from '../platform/store';
 import type { FinishResult } from '../platform/session';
 import { CreatureArt } from './CreatureArt';
@@ -21,11 +21,11 @@ export function Encounter({ pack, mission, result, onDone }: {
   const [owned, setOwned] = useState(0);
   const [msg, setMsg] = useState('');
   const card = useRef<View>(null);
-  const [leaves, setLeaves] = useState(0);
+  const [earned, setEarned] = useState<Cost>({});
   useEffect(() => {
     void collection().then((cs) => setOwned(cs.length));
-    void allClaims().then((cs) => setLeaves(claimEarnings(cs).find((e) => e.claimId === result.claim?.claimId)?.leaves ?? 0));
-  }, [result.claim?.claimId]);
+    void allClaims().then((cs) => setEarned(claimRewards(pack, cs).find((e) => e.claimId === result.claim?.claimId)?.materials ?? {}));
+  }, [pack, result.claim?.claimId]);
   const items = (result.claim?.items ?? []).map((id) => pack.items.find((i) => i.id === id)).filter((x) => !!x);
   const met = taps >= TAPS;
 
@@ -57,8 +57,8 @@ export function Encounter({ pack, mission, result, onDone }: {
       <Card>
         <P>Đi bộ được xác nhận: {fmtM(result.snapshot.walkM)}</P>
         <P>Bộ sưu tập: {owned}/{pack.creatures.length}</P>
-        <P testID="leaves-earned">Nhận được: 🍃 {leaves} lá cho ngôi làng</P>
-        {items.length > 0 && <P>Nhặt trên đường: {items.map((i) => i!.name).join(', ')}</P>}
+        <P testID="materials-earned">Vật liệu cho làng: {Object.entries(earned).map(([id, n]) => `${resourceName(pack, id)} ×${n}`).join(', ')}</P>
+        {items.length > 0 && <P>Báu vật nhặt trên đường: {items.map((i) => i!.name).join(', ')}</P>}
       </Card>
       <Row>
         <Button title="Chia sẻ ảnh" onPress={share} testID="share" />

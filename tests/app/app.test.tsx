@@ -91,8 +91,8 @@ describe('Android app, real-device path (fake foreground service)', () => {
     await screen.findByTestId('encounter');
     for (let i = 0; i < 3; i++) await tap('creature-tap');
     await screen.findByTestId('result');
-    // First meeting: 10 + 1 per 20 m + 20 bonus leaves for the village.
-    await waitFor(() => expect(within('leaves-earned')).toMatch(/🍃\s+\d{2,}/));
+    // Building materials for the village, named on the result screen.
+    await waitFor(() => expect(within('materials-earned')).toMatch(/×\d/));
     await tap('share');
     expect(device.shared).toContain('file:///cache/share.png');
     await tap('to-collection');
@@ -248,57 +248,89 @@ describe('simulation mode', () => {
 });
 
 describe('village', () => {
+  const tree = () => PACK.routes.find((r) => PACK.pois.find((p) => p.id === r.poi)?.type === 'tree')!.id;
+  const pav = () => PACK.routes.find((r) => PACK.pois.find((p) => p.id === r.poi)?.type === 'pavilion')!.id;
+  /** Verified walks written through the same claim path a real walk uses. */
   async function seed() {
-    // One verified walk today (creature + items), written through the same claim path as a real walk.
-    await store.writeClaim({ claimId: 'm1', missionId: 'm1', sessionId: 's1', date: '2026-11-03', at: T0, creatureId: 'meo-may',
-      items: ['la-bang', 'la-bang', 'soi-cuoi'], walkM: 600, syncState: 'local' });
+    // Tree, 1000 m, first meeting: 14 units → 7+2 wood + 7 spread over stone/bamboo/clay/thatch.
+    await store.writeClaim({ claimId: `2026-11-03_30_${tree()}`, missionId: `2026-11-03_30_${tree()}`, sessionId: 's1', date: '2026-11-03', at: T0,
+      creatureId: 'meo-may', items: ['la-bang', 'long-den'], walkM: 1000, syncState: 'local' });
+    // Pavilion, 1000 m: bamboo.
+    await store.writeClaim({ claimId: `2026-11-03_20_${pav()}`, missionId: `2026-11-03_20_${pav()}`, sessionId: 's2', date: '2026-11-03', at: T0 + 1,
+      creatureId: 'meo-may', items: [], walkM: 1000, syncState: 'local' });
   }
+  const stock = async () => (await store.village(PACK, '2026-11-03')).stock;
 
-  test('build with leaves + items, invite a creature, collect the daily gift', async () => {
+  test('build from materials, craft at the workshop, trade at the market, invite, gift, persist', async () => {
     await seed();
     render(<App />);
     await onboard();
     await tap('tab-village');
-    // 10 + 600/20 + 20 first meeting = 60 leaves
-    expect(within('leaves')).toBe('60');
-    await tap('build-mushroom-house');
+    expect(within('stock')).toMatch(/Gỗ \d+/);
+    const s0 = await stock();
+    // Workshop first.
+    await tap('build-carpenter');
+    await tap('tile-0-0');
+    await screen.findByTestId('tile-carpenter');
+    let s = await stock();
+    expect(s.go).toBe(s0.go! - 4);
+    // Craft a plank: 2 wood → 1 ván.
+    await tap('craft-van');
+    s = await stock();
+    expect(s.van).toBe(1);
+    // Trade bamboo for thatch at the market.
+    await tap('give-tre');
+    await tap('get-co');
+    const coBefore = s.co ?? 0;
+    await tap('trade');
+    s = await stock();
+    expect(s.co).toBe(coBefore + 1);
+    // A hut (3 wood, 4 thatch, 2 bamboo); trade more thatch if needed.
+    while (((await stock()).co ?? 0) < 4) await tap('trade');
+    await tap('build-thatched-hut');
     await tap('tile-1-1');
-    await screen.findByTestId('tile-mushroom-house');
-    expect(within('leaves')).toBe('30');
-    expect(within('build-mushroom-house')).toMatch(/Lá bàng đỏ 1\/1/);
-    // Locked building explains why.
-    await tap('build-lotus-pond');
-    expect(within('village-msg')).toMatch(/cấp/);
-    // Invite the creature we met.
-    await tap('tile-mushroom-house');
+    await screen.findByTestId('tile-thatched-hut');
+    await tap('tile-thatched-hut');
     await tap('invite-meo-may');
     expect(within('village-msg')).toMatch(/Mèo Mây đã chuyển đến/);
-    // A resident + a walk today = a gift, once.
     await tap('collect-gift');
-    expect(within('leaves')).toBe('33');
     expect(screen.queryByTestId('collect-gift')).toBeNull();
-    // Persisted: reopen the app and the village is still there.
+    expect((await store.village(PACK, '2026-11-03')).gift).toBeNull();
+    // Reopen: everything persisted.
     screen.unmount();
     render(<App />);
     await screen.findByTestId('today');
     await tap('tab-village');
-    await screen.findByTestId('tile-mushroom-house');
-    expect(within('leaves')).toBe('33');
+    await screen.findByTestId('tile-thatched-hut');
+    await screen.findByTestId('tile-carpenter');
   });
 
-  test('cannot overspend: second house refused when leaves run out', async () => {
+  test('a building you cannot afford says what is missing and where to get it', async () => {
+    render(<App />);
+    await onboard();
+    await tap('tab-village');
+    await tap('build-thatched-hut');
+    expect(within('village-msg')).toMatch(/Chưa đủ vật liệu/);
+    expect(within('village-msg')).toMatch(/Gỗ ×3: đi tới/);
+    expect(screen.queryByTestId('tile-thatched-hut')).toBeNull();
+    // Locked by level.
+    await tap('build-kiln');
+    expect(within('village-msg')).toMatch(/cấp/);
+    // Workshop recipes are disabled without the workshop.
+    expect(within('recipe-gach')).toMatch(/Cần xây\s+Lò gạch/);
+  });
+
+  test('cannot overspend and only one workshop of a kind', async () => {
     await seed();
     render(<App />);
     await onboard();
     await tap('tab-village');
-    await tap('build-mushroom-house');
+    await tap('build-carpenter');
     await tap('tile-0-0');
-    await tap('build-mushroom-house');
-    await tap('tile-0-1');
-    expect(within('leaves')).toBe('0');
-    await tap('build-mushroom-house');
-    expect(within('village-msg')).toMatch(/Chưa đủ/);
-    expect(screen.getAllByTestId('tile-mushroom-house').length).toBe(2);
+    await tap('build-carpenter');
+    expect(within('village-msg')).toMatch(/đủ số công trình/);
+    // Direct double write through the store is refused too.
+    expect(await store.placeBuilding(PACK, 'carpenter', 2, 2, T0)).toBe('LIMIT');
   });
 
   test('move a building to another tile', async () => {

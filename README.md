@@ -27,15 +27,32 @@ Hoặc chạy thẳng lên máy đang cắm cáp: `npm run android`.
 
 ## Ngôi làng
 
-Phần thưởng của mỗi chuyến đi bộ hợp lệ được mang về làng (tab **Làng**):
+Phần thưởng của mỗi chuyến đi bộ hợp lệ được mang về làng (tab **Làng**). Xây dựng cần nhiều loại vật phẩm:
 
-- **Lá**: 10 lá mỗi chuyến + 1 lá mỗi 20 m đi bộ được xác nhận + 20 lá khi gặp sinh vật mới.
-- **Vật phẩm** nhặt dọc tuyến (lá bàng, hạt sen, sỏi cuội…) cùng với lá dùng để xây 10 loại công trình: nhà nấm, cây đa, vườn hoa giấy, ao sen, quảng trường, đình nhỏ và đồ trang trí.
-- **Độ đẹp** của công trình đưa làng lên cấp (tối đa 6); mỗi cấp mở thêm một hàng và một cột đất (4×4 → 9×9) và công trình mới.
-- **Cư dân**: sinh vật đã gặp chuyển đến ở công trình hợp môi trường sống (ao sen cho sinh vật bờ hồ, cây đa cho sinh vật gốc cây; nhà nấm nhận mọi loài).
-- **Quà dân làng**: ngày nào có chuyến đi bộ hợp lệ, mỗi cư dân tặng 3 lá, nhận một lần mỗi ngày. Làng chỉ lớn lên nhờ đi bộ, không nhờ mở app.
+| Loại | Gồm | Lấy ở đâu |
+| --- | --- | --- |
+| Vật liệu thô | 🪵 Gỗ, 🪨 Đá, 🎋 Tre, 🟤 Đất sét, 🌾 Cỏ tranh | Mỗi chuyến: 4 + 1 mỗi 100 m đi bộ được xác nhận. Một nửa là vật liệu của nơi đến (gốc cây → gỗ, bờ hồ → đất sét, vườn → cỏ tranh, quảng trường → đá, mái đình → tre), phần còn lại chia cho các loại khác. Gặp sinh vật mới +2. |
+| Vật liệu chế tạo | 🟫 Ván gỗ, 🪜 Khung tre (Xưởng mộc) · 🧱 Gạch, 🔶 Ngói (Lò gạch) | Làm từ vật liệu thô, sau khi đã xây xưởng tương ứng |
+| Báu vật | Lá bàng đỏ, Hạt sen, Lồng đèn giấy, Vỏ ốc xoắn, Cánh hoa giấy, Sỏi cuội | Nhặt ở các dấu vết dọc tuyến; hiếm, dùng cho nhà ở và nâng cấp |
 
-Số lá luôn được tính lại từ sổ nhận thưởng và danh sách công trình, nên không thể lệch hay bị cộng hai lần; mỗi lần xây được kiểm tra lại trong một giao dịch SQLite.
+- **14 loại công trình** qua 5 cấp mở khóa: lối sỏi, nhà tranh, xưởng mộc, đèn lồng, lò gạch, cây đa, vườn hoa giấy, ghế đá, ao sen, quảng trường, giếng, đình, cầu tre, nhà rông. Nhà ở có 2–3 bậc nâng cấp (thêm chỗ ở, thêm độ đẹp); mỗi loại có giới hạn số lượng để không thể dồn đồ trang trí rẻ lấy điểm.
+- **Độ đẹp** đưa làng lên cấp (tối đa 6), mỗi cấp mở thêm đất (4×4 → 9×9).
+- **Chợ phiên**: đổi 3 vật liệu thô lấy 1 loại khác, để người có tuyến đi bộ không qua gốc cây vẫn có gỗ.
+- **Cư dân**: sinh vật đã gặp chuyển đến công trình hợp môi trường sống. Ngày nào có chuyến đi bộ hợp lệ, mỗi cư dân mang về 1 vật liệu của môi trường của nó.
+- Màn hình Hôm nay ghi vật liệu chính của từng điểm đến, nên người chơi chọn nơi đi theo thứ mình đang thiếu. Thiếu gì, màn hình Làng chỉ rõ cần đi đâu hoặc làm ở xưởng nào.
+
+Kho luôn được tính lại từ sổ nhận thưởng và những gì người chơi đã làm (xây, nâng cấp, chế tạo, đổi chợ), nên không thể lệch hay bị cộng hai lần; mỗi thao tác được kiểm tra lại trong một giao dịch SQLite.
+
+### Kiểm tra nhịp chơi
+
+`tests/unit/village-pacing.test.ts` cho một người chơi tự động chơi 70–120 ngày với nhiệm vụ thật của gói khu vực:
+
+| Kiểu người chơi | Cấp 2 | Cấp 3 | Cấp 4 | Cấp 5 | Cấp 6 |
+| --- | --- | --- | --- | --- | --- |
+| Đều đặn (~1,5 chuyến/ngày, đủ 10/20/30 phút) | ngày 2 | ngày 5–6 | ngày 11–12 | ngày 17–18 | ngày 26 |
+| Thong thả (1 chuyến 10 phút mỗi 3 ngày) | chuyến 3–4 | chuyến 8–17 | chuyến 15–25 | chuyến 22–36 | chuyến 33+ |
+
+Test khẳng định: không có chặng nào quá 2 tuần, người chơi đều đặn hiếm khi đi xong một chuyến mà không xây được gì, cấp 6 cần ít nhất 3 tuần. Mô phỏng này đã phát hiện người chơi có tuyến không qua gốc cây bị kẹt vì thiếu gỗ, từ đó có chợ phiên.
 
 ## Chế độ mô phỏng
 
@@ -45,8 +62,8 @@ Không ra đường được? Vào **Cài đặt → Bật mô phỏng**, chọn
 
 ```bash
 npm run typecheck
-npm test            # lõi xác minh + làng: 230 test (15 kịch bản × nhiều tuyến × seed, nhiệm vụ, sổ thưởng…)
-npm run test:app    # cả app: 17 test trên màn hình thật, SQL thật, service Android giả lập
+npm test            # lõi xác minh + làng + mô phỏng nhịp chơi: 243 test (15 kịch bản × nhiều tuyến × seed, nhiệm vụ, sổ thưởng…)
+npm run test:app    # cả app: 18 test trên màn hình thật, SQL thật, service Android giả lập
 npm run test:native # biên dịch Kotlin + 14 test EventLog trên JVM (không cần Android SDK)
 ```
 
