@@ -1,0 +1,49 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test          # verification core + village
+      - run: npm run test:app  # whole app with fake native edges
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - run: npm run test:native  # Kotlin EventLog on the JVM
+
+  apk:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: npm ci
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --clean --no-install
+      - name: Build release APK
+        working-directory: android
+        # Signed with the template's debug keystore: installable for testing, not for Play Store.
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+      - uses: actions/upload-artifact@v4
+        with:
+          name: di-bo-kham-pha-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
