@@ -1,0 +1,1249 @@
+{
+ "id": "sample-park-q1",
+ "name": "Công viên mẫu (Quận 1)",
+ "version": "1.0.0",
+ "updated": "2026-11-02",
+ "sample": true,
+ "origin": {
+  "lat": 10.7745,
+  "lng": 106.692
+ },
+ "bounds": {
+  "south": 10.772432,
+  "west": 106.689254,
+  "north": 10.776568,
+  "east": 106.694746
+ },
+ "nodes": [
+  {
+   "id": "N1",
+   "lat": 10.7759389,
+   "lng": 106.689986
+  },
+  {
+   "id": "N2",
+   "lat": 10.7759389,
+   "lng": 106.6912676
+  },
+  {
+   "id": "N0",
+   "lat": 10.7759389,
+   "lng": 106.692
+  },
+  {
+   "id": "N3",
+   "lat": 10.7759389,
+   "lng": 106.6927324
+  },
+  {
+   "id": "N4",
+   "lat": 10.7759389,
+   "lng": 106.694014
+  },
+  {
+   "id": "E1",
+   "lat": 10.7748597,
+   "lng": 106.694014
+  },
+  {
+   "id": "E2",
+   "lat": 10.7739604,
+   "lng": 106.694014
+  },
+  {
+   "id": "S4",
+   "lat": 10.7730611,
+   "lng": 106.694014
+  },
+  {
+   "id": "L2",
+   "lat": 10.7730611,
+   "lng": 106.6933732
+  },
+  {
+   "id": "S3",
+   "lat": 10.7730611,
+   "lng": 106.6927324
+  },
+  {
+   "id": "S2",
+   "lat": 10.7730611,
+   "lng": 106.6912676
+  },
+  {
+   "id": "S1",
+   "lat": 10.7730611,
+   "lng": 106.689986
+  },
+  {
+   "id": "W2",
+   "lat": 10.7739604,
+   "lng": 106.689986
+  },
+  {
+   "id": "W1",
+   "lat": 10.7748597,
+   "lng": 106.689986
+  },
+  {
+   "id": "C",
+   "lat": 10.7745,
+   "lng": 106.692
+  },
+  {
+   "id": "I1",
+   "lat": 10.7748597,
+   "lng": 106.6912676
+  },
+  {
+   "id": "I2",
+   "lat": 10.7748597,
+   "lng": 106.6927324
+  },
+  {
+   "id": "I3",
+   "lat": 10.7739604,
+   "lng": 106.6927324
+  },
+  {
+   "id": "I4",
+   "lat": 10.7739604,
+   "lng": 106.6912676
+  },
+  {
+   "id": "L1",
+   "lat": 10.7739604,
+   "lng": 106.6933732
+  },
+  {
+   "id": "GN",
+   "lat": 10.7761637,
+   "lng": 106.692
+  },
+  {
+   "id": "GW",
+   "lat": 10.7739604,
+   "lng": 106.6897571
+  }
+ ],
+ "edges": [
+  [
+   "N1",
+   "N2"
+  ],
+  [
+   "N2",
+   "N0"
+  ],
+  [
+   "N0",
+   "N3"
+  ],
+  [
+   "N3",
+   "N4"
+  ],
+  [
+   "N4",
+   "E1"
+  ],
+  [
+   "E1",
+   "E2"
+  ],
+  [
+   "E2",
+   "S4"
+  ],
+  [
+   "S4",
+   "L2"
+  ],
+  [
+   "L2",
+   "S3"
+  ],
+  [
+   "S3",
+   "S2"
+  ],
+  [
+   "S2",
+   "S1"
+  ],
+  [
+   "S1",
+   "W2"
+  ],
+  [
+   "W2",
+   "W1"
+  ],
+  [
+   "W1",
+   "N1"
+  ],
+  [
+   "N2",
+   "I1"
+  ],
+  [
+   "N3",
+   "I2"
+  ],
+  [
+   "N0",
+   "C"
+  ],
+  [
+   "I1",
+   "I2"
+  ],
+  [
+   "I2",
+   "I3"
+  ],
+  [
+   "I3",
+   "I4"
+  ],
+  [
+   "I4",
+   "I1"
+  ],
+  [
+   "C",
+   "I1"
+  ],
+  [
+   "C",
+   "I2"
+  ],
+  [
+   "C",
+   "I3"
+  ],
+  [
+   "C",
+   "I4"
+  ],
+  [
+   "E1",
+   "I2"
+  ],
+  [
+   "I3",
+   "L1"
+  ],
+  [
+   "L1",
+   "E2"
+  ],
+  [
+   "S2",
+   "I4"
+  ],
+  [
+   "W1",
+   "I1"
+  ],
+  [
+   "W2",
+   "I4"
+  ],
+  [
+   "S3",
+   "I3"
+  ],
+  [
+   "GN",
+   "N0"
+  ],
+  [
+   "GW",
+   "W2"
+  ]
+ ],
+ "forbidden": [
+  {
+   "id": "lake",
+   "name": "Mặt hồ",
+   "polygon": [
+    {
+     "lat": 10.7732859,
+     "lng": 106.693007
+    },
+    {
+     "lat": 10.7732859,
+     "lng": 106.6937394
+    },
+    {
+     "lat": 10.7735107,
+     "lng": 106.6937851
+    },
+    {
+     "lat": 10.7737356,
+     "lng": 106.6937394
+    },
+    {
+     "lat": 10.7737356,
+     "lng": 106.693007
+    },
+    {
+     "lat": 10.7735107,
+     "lng": 106.6929612
+    }
+   ]
+  }
+ ],
+ "hubs": [
+  {
+   "id": "h-north",
+   "name": "Cổng Bắc",
+   "node": "GN",
+   "lat": 10.7761637,
+   "lng": 106.692
+  },
+  {
+   "id": "h-west",
+   "name": "Cổng Tây",
+   "node": "GW",
+   "lat": 10.7739604,
+   "lng": 106.6897571
+  }
+ ],
+ "pois": [
+  {
+   "id": "p-plaza",
+   "name": "Quảng trường trung tâm",
+   "node": "C",
+   "type": "plaza",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7745,
+   "lng": 106.692
+  },
+  {
+   "id": "p-banyan",
+   "name": "Gốc đa trăm tuổi",
+   "node": "I2",
+   "type": "tree",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7748597,
+   "lng": 106.6927324
+  },
+  {
+   "id": "p-pavilion",
+   "name": "Chòi nghỉ mái ngói",
+   "node": "I4",
+   "type": "pavilion",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7739604,
+   "lng": 106.6912676
+  },
+  {
+   "id": "p-lotus",
+   "name": "Bờ hồ sen",
+   "node": "L1",
+   "type": "pond",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7739604,
+   "lng": 106.6933732
+  },
+  {
+   "id": "p-stone-pier",
+   "name": "Bến đá phía nam",
+   "node": "L2",
+   "type": "pond",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7730611,
+   "lng": 106.6933732
+  },
+  {
+   "id": "p-bougainvillea",
+   "name": "Vườn hoa giấy",
+   "node": "I1",
+   "type": "garden",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7748597,
+   "lng": 106.6912676
+  },
+  {
+   "id": "p-bamboo",
+   "name": "Lối tre",
+   "node": "W1",
+   "type": "tree",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7748597,
+   "lng": 106.689986
+  },
+  {
+   "id": "p-playground",
+   "name": "Sân chơi thiếu nhi",
+   "node": "N1",
+   "type": "plaza",
+   "radiusM": 30,
+   "hours": [
+    6,
+    21
+   ],
+   "status": "active",
+   "lat": 10.7759389,
+   "lng": 106.689986
+  },
+  {
+   "id": "p-chess",
+   "name": "Góc cờ tướng",
+   "node": "N4",
+   "type": "pavilion",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7759389,
+   "lng": 106.694014
+  },
+  {
+   "id": "p-fountain",
+   "name": "Đài phun nước",
+   "node": "E1",
+   "type": "plaza",
+   "radiusM": 30,
+   "hours": null,
+   "status": "closed",
+   "lat": 10.7748597,
+   "lng": 106.694014,
+   "note": "Đang bảo trì"
+  },
+  {
+   "id": "p-rock-garden",
+   "name": "Vườn đá",
+   "node": "S2",
+   "type": "garden",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7730611,
+   "lng": 106.6912676
+  },
+  {
+   "id": "p-birds",
+   "name": "Hàng sao chim hót",
+   "node": "S1",
+   "type": "tree",
+   "radiusM": 30,
+   "hours": [
+    5,
+    18
+   ],
+   "status": "active",
+   "lat": 10.7730611,
+   "lng": 106.689986
+  },
+  {
+   "id": "p-drum",
+   "name": "Nhà trống",
+   "node": "I3",
+   "type": "pavilion",
+   "radiusM": 30,
+   "hours": null,
+   "status": "active",
+   "lat": 10.7739604,
+   "lng": 106.6927324
+  }
+ ],
+ "routes": [
+  {
+   "id": "r-n-plaza",
+   "hub": "h-north",
+   "poi": "p-plaza",
+   "nodes": [
+    "GN",
+    "N0",
+    "C"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-plaza-w1",
+     "itemId": "la-bang",
+     "lat": 10.7753319,
+     "lng": 106.692
+    }
+   ]
+  },
+  {
+   "id": "r-n-banyan",
+   "hub": "h-north",
+   "poi": "p-banyan",
+   "nodes": [
+    "GN",
+    "N0",
+    "N3",
+    "I2"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-banyan-w1",
+     "itemId": "hat-sen",
+     "lat": 10.7758715,
+     "lng": 106.6927324
+    }
+   ]
+  },
+  {
+   "id": "r-n-bougainvillea",
+   "hub": "h-north",
+   "poi": "p-bougainvillea",
+   "nodes": [
+    "GN",
+    "N0",
+    "N2",
+    "I1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-bougainvillea-w1",
+     "itemId": "long-den",
+     "lat": 10.7758715,
+     "lng": 106.6912676
+    }
+   ]
+  },
+  {
+   "id": "r-n-pavilion",
+   "hub": "h-north",
+   "poi": "p-pavilion",
+   "nodes": [
+    "GN",
+    "N0",
+    "C",
+    "I4"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-pavilion-w1",
+     "itemId": "vo-oc",
+     "lat": 10.7748822,
+     "lng": 106.692
+    }
+   ]
+  },
+  {
+   "id": "r-n-drum",
+   "hub": "h-north",
+   "poi": "p-drum",
+   "nodes": [
+    "GN",
+    "N0",
+    "C",
+    "I3"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-drum-w1",
+     "itemId": "hoa-giay",
+     "lat": 10.7748822,
+     "lng": 106.692
+    }
+   ]
+  },
+  {
+   "id": "r-n-chess",
+   "hub": "h-north",
+   "poi": "p-chess",
+   "nodes": [
+    "GN",
+    "N0",
+    "N3",
+    "N4"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-chess-w1",
+     "itemId": "soi-cuoi",
+     "lat": 10.7759389,
+     "lng": 106.6928926
+    }
+   ]
+  },
+  {
+   "id": "r-n-playground",
+   "hub": "h-north",
+   "poi": "p-playground",
+   "nodes": [
+    "GN",
+    "N0",
+    "N2",
+    "N1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-playground-w1",
+     "itemId": "la-bang",
+     "lat": 10.7759389,
+     "lng": 106.6911074
+    }
+   ]
+  },
+  {
+   "id": "r-n-lotus",
+   "hub": "h-north",
+   "poi": "p-lotus",
+   "nodes": [
+    "GN",
+    "N0",
+    "N3",
+    "N4",
+    "E1",
+    "E2",
+    "L1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-lotus-w1",
+     "itemId": "hat-sen",
+     "lat": 10.7759389,
+     "lng": 106.6934853
+    },
+    {
+     "id": "r-n-lotus-w2",
+     "itemId": "long-den",
+     "lat": 10.7747743,
+     "lng": 106.694014
+    }
+   ]
+  },
+  {
+   "id": "r-n-stone-pier",
+   "hub": "h-north",
+   "poi": "p-stone-pier",
+   "nodes": [
+    "GN",
+    "N0",
+    "N3",
+    "N4",
+    "E1",
+    "E2",
+    "S4",
+    "L2"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-stone-pier-w1",
+     "itemId": "long-den",
+     "lat": 10.7759389,
+     "lng": 106.6938058
+    },
+    {
+     "id": "r-n-stone-pier-w2",
+     "itemId": "vo-oc",
+     "lat": 10.7741448,
+     "lng": 106.694014
+    }
+   ]
+  },
+  {
+   "id": "r-n-rock-garden",
+   "hub": "h-north",
+   "poi": "p-rock-garden",
+   "nodes": [
+    "GN",
+    "N0",
+    "N2",
+    "N1",
+    "W1",
+    "W2",
+    "S1",
+    "S2"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-rock-garden-w1",
+     "itemId": "vo-oc",
+     "lat": 10.7759232,
+     "lng": 106.689986
+    },
+    {
+     "id": "r-n-rock-garden-w2",
+     "itemId": "hoa-giay",
+     "lat": 10.7737041,
+     "lng": 106.689986
+    }
+   ]
+  },
+  {
+   "id": "r-n-birds",
+   "hub": "h-north",
+   "poi": "p-birds",
+   "nodes": [
+    "GN",
+    "N0",
+    "N2",
+    "N1",
+    "W1",
+    "W2",
+    "S1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-birds-w1",
+     "itemId": "hoa-giay",
+     "lat": 10.7759389,
+     "lng": 106.6904185
+    },
+    {
+     "id": "r-n-birds-w2",
+     "itemId": "soi-cuoi",
+     "lat": 10.7745854,
+     "lng": 106.689986
+    }
+   ]
+  },
+  {
+   "id": "r-n-bamboo-loop",
+   "hub": "h-north",
+   "poi": "p-bamboo",
+   "nodes": [
+    "GN",
+    "N0",
+    "C",
+    "I4",
+    "W2",
+    "W1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-bamboo-loop-w1",
+     "itemId": "soi-cuoi",
+     "lat": 10.7745112,
+     "lng": 106.692
+    },
+    {
+     "id": "r-n-bamboo-loop-w2",
+     "itemId": "la-bang",
+     "lat": 10.7739604,
+     "lng": 106.6905124
+    }
+   ]
+  },
+  {
+   "id": "r-n-lotus-grand",
+   "hub": "h-north",
+   "poi": "p-lotus",
+   "nodes": [
+    "GN",
+    "N0",
+    "N2",
+    "N1",
+    "W1",
+    "W2",
+    "S1",
+    "S2",
+    "S3",
+    "I3",
+    "L1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-lotus-grand-w1",
+     "itemId": "la-bang",
+     "lat": 10.7748844,
+     "lng": 106.689986
+    },
+    {
+     "id": "r-n-lotus-grand-w2",
+     "itemId": "hat-sen",
+     "lat": 10.7730611,
+     "lng": 106.6914462
+    }
+   ]
+  },
+  {
+   "id": "r-n-birds-grand",
+   "hub": "h-north",
+   "poi": "p-birds",
+   "nodes": [
+    "GN",
+    "N0",
+    "N3",
+    "N4",
+    "E1",
+    "E2",
+    "S4",
+    "L2",
+    "S3",
+    "S2",
+    "S1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-n-birds-grand-w1",
+     "itemId": "hat-sen",
+     "lat": 10.7749789,
+     "lng": 106.694014
+    },
+    {
+     "id": "r-n-birds-grand-w2",
+     "itemId": "long-den",
+     "lat": 10.7730611,
+     "lng": 106.6927461
+    }
+   ]
+  },
+  {
+   "id": "r-w-bamboo",
+   "hub": "h-west",
+   "poi": "p-bamboo",
+   "nodes": [
+    "GW",
+    "W2",
+    "W1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-bamboo-w1",
+     "itemId": "long-den",
+     "lat": 10.7742977,
+     "lng": 106.689986
+    }
+   ]
+  },
+  {
+   "id": "r-w-pavilion",
+   "hub": "h-west",
+   "poi": "p-pavilion",
+   "nodes": [
+    "GW",
+    "W2",
+    "I4"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-pavilion-w1",
+     "itemId": "vo-oc",
+     "lat": 10.7739604,
+     "lng": 106.6905124
+    }
+   ]
+  },
+  {
+   "id": "r-w-birds",
+   "hub": "h-west",
+   "poi": "p-birds",
+   "nodes": [
+    "GW",
+    "W2",
+    "S1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-birds-w1",
+     "itemId": "hoa-giay",
+     "lat": 10.7736232,
+     "lng": 106.689986
+    }
+   ]
+  },
+  {
+   "id": "r-w-plaza",
+   "hub": "h-west",
+   "poi": "p-plaza",
+   "nodes": [
+    "GW",
+    "W2",
+    "I4",
+    "C"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-plaza-w1",
+     "itemId": "soi-cuoi",
+     "lat": 10.7739604,
+     "lng": 106.6909701
+    }
+   ]
+  },
+  {
+   "id": "r-w-rock-garden",
+   "hub": "h-west",
+   "poi": "p-rock-garden",
+   "nodes": [
+    "GW",
+    "W2",
+    "S1",
+    "S2"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-rock-garden-w1",
+     "itemId": "la-bang",
+     "lat": 10.7730611,
+     "lng": 106.6900546
+    }
+   ]
+  },
+  {
+   "id": "r-w-drum",
+   "hub": "h-west",
+   "poi": "p-drum",
+   "nodes": [
+    "GW",
+    "W2",
+    "I4",
+    "C",
+    "I3"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-drum-w1",
+     "itemId": "hat-sen",
+     "lat": 10.7740548,
+     "lng": 106.6913958
+    }
+   ]
+  },
+  {
+   "id": "r-w-lotus",
+   "hub": "h-west",
+   "poi": "p-lotus",
+   "nodes": [
+    "GW",
+    "W2",
+    "S1",
+    "S2",
+    "S3",
+    "I3",
+    "L1"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-lotus-w1",
+     "itemId": "long-den",
+     "lat": 10.7730611,
+     "lng": 106.6907481
+    },
+    {
+     "id": "r-w-lotus-w2",
+     "itemId": "vo-oc",
+     "lat": 10.7730611,
+     "lng": 106.6926546
+    }
+   ]
+  },
+  {
+   "id": "r-w-stone-pier",
+   "hub": "h-west",
+   "poi": "p-stone-pier",
+   "nodes": [
+    "GW",
+    "W2",
+    "W1",
+    "N1",
+    "N2",
+    "I1",
+    "C",
+    "I3",
+    "S3",
+    "L2"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-stone-pier-w1",
+     "itemId": "vo-oc",
+     "lat": 10.7759389,
+     "lng": 106.6905129
+    },
+    {
+     "id": "r-w-stone-pier-w2",
+     "itemId": "hoa-giay",
+     "lat": 10.7744424,
+     "lng": 106.6920781
+    }
+   ]
+  },
+  {
+   "id": "r-w-chess",
+   "hub": "h-west",
+   "poi": "p-chess",
+   "nodes": [
+    "GW",
+    "W2",
+    "W1",
+    "N1",
+    "N2",
+    "N0",
+    "N3",
+    "N4"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-chess-w1",
+     "itemId": "hoa-giay",
+     "lat": 10.7758917,
+     "lng": 106.689986
+    },
+    {
+     "id": "r-w-chess-w2",
+     "itemId": "soi-cuoi",
+     "lat": 10.7759389,
+     "lng": 106.6921327
+    }
+   ]
+  },
+  {
+   "id": "r-w-banyan",
+   "hub": "h-west",
+   "poi": "p-banyan",
+   "nodes": [
+    "GW",
+    "W2",
+    "S1",
+    "S2",
+    "I4",
+    "C",
+    "I2"
+   ],
+   "waypoints": [
+    {
+     "id": "r-w-banyan-w1",
+     "itemId": "soi-cuoi",
+     "lat": 10.7730611,
+     "lng": 106.6906182
+    },
+    {
+     "id": "r-w-banyan-w2",
+     "itemId": "la-bang",
+     "lat": 10.7740851,
+     "lng": 106.6914369
+    }
+   ]
+  }
+ ],
+ "themes": [
+  "Nước",
+  "Gió",
+  "Cây",
+  "Lễ hội"
+ ],
+ "creatures": [
+  {
+   "id": "meo-may",
+   "name": "Mèo Mây",
+   "habitats": [
+    "plaza",
+    "pavilion"
+   ],
+   "theme": "Gió",
+   "rarity": "common",
+   "description": "Cuộn tròn như một cụm mây nhỏ, thích nằm nơi có gió lùa.",
+   "line": "Meo... gió hôm nay mát quá!",
+   "art": {
+    "body": "#e8eef7",
+    "accent": "#8fb3e0",
+    "shape": "round",
+    "feature": "cat"
+   }
+  },
+  {
+   "id": "rua-reu",
+   "name": "Rùa Rêu",
+   "habitats": [
+    "pond"
+   ],
+   "theme": "Nước",
+   "rarity": "common",
+   "description": "Mai phủ rêu xanh, đi chậm nhưng nhớ mọi lối quanh hồ.",
+   "line": "Từ từ thôi, hồ vẫn ở đây mà.",
+   "art": {
+    "body": "#7fae6a",
+    "accent": "#3f6b3a",
+    "shape": "flat",
+    "feature": "shell"
+   }
+  },
+  {
+   "id": "se-den-long",
+   "name": "Sẻ Đèn Lồng",
+   "habitats": [
+    "tree",
+    "plaza"
+   ],
+   "theme": "Lễ hội",
+   "rarity": "common",
+   "description": "Bụng phát sáng dịu như đèn lồng giấy mỗi khi trời chạng vạng.",
+   "line": "Chíp! Đèn đã sẵn sàng!",
+   "art": {
+    "body": "#f2a65a",
+    "accent": "#d9472b",
+    "shape": "round",
+    "feature": "wings"
+   }
+  },
+  {
+   "id": "ca-chep-gio",
+   "name": "Cá Chép Gió",
+   "habitats": [
+    "pond"
+   ],
+   "theme": "Gió",
+   "rarity": "rare",
+   "description": "Bơi trong không khí như diều cá chép, chỉ hiện khi có người đi bộ đủ xa.",
+   "line": "Bạn đi xa thật đấy!",
+   "art": {
+    "body": "#f05d4a",
+    "accent": "#ffd166",
+    "shape": "tall",
+    "feature": "fins"
+   }
+  },
+  {
+   "id": "nghe-suong",
+   "name": "Nghé Sương",
+   "habitats": [
+    "garden"
+   ],
+   "theme": "Nước",
+   "rarity": "common",
+   "description": "Chú nghé nhỏ uống sương sớm trên lá cỏ.",
+   "line": "Ụm bò... sương còn đọng kìa.",
+   "art": {
+    "body": "#9aa4b5",
+    "accent": "#5a6478",
+    "shape": "round",
+    "feature": "horns"
+   }
+  },
+  {
+   "id": "oc-ngoc",
+   "name": "Ốc Ngọc",
+   "habitats": [
+    "pond",
+    "garden"
+   ],
+   "theme": "Nước",
+   "rarity": "common",
+   "description": "Vỏ ốc lấp lánh như ngọc trai, để lại vệt sáng trên đá.",
+   "line": "Xoắn... xoắn... chào bạn!",
+   "art": {
+    "body": "#f3d9e8",
+    "accent": "#b56fa0",
+    "shape": "flat",
+    "feature": "spiral"
+   }
+  },
+  {
+   "id": "ve-sau-tre",
+   "name": "Ve Sầu Tre",
+   "habitats": [
+    "tree"
+   ],
+   "theme": "Cây",
+   "rarity": "common",
+   "description": "Hát vào mùa hè, thân màu tre non.",
+   "line": "Re re re! Hè rồi!",
+   "art": {
+    "body": "#b5c96a",
+    "accent": "#5d7a2a",
+    "shape": "tall",
+    "feature": "wings"
+   }
+  },
+  {
+   "id": "chuon-chuon-ngo",
+   "name": "Chuồn Chuồn Ngô",
+   "habitats": [
+    "garden",
+    "pond"
+   ],
+   "theme": "Gió",
+   "rarity": "common",
+   "description": "Bay thấp là mưa, bay cao là nắng, bay vừa thì... chơi với bạn.",
+   "line": "Vù! Hôm nay nắng đẹp!",
+   "art": {
+    "body": "#5ab4c9",
+    "accent": "#246b7d",
+    "shape": "tall",
+    "feature": "dragonfly"
+   }
+  },
+  {
+   "id": "cu-mai-ngoi",
+   "name": "Cú Mái Ngói",
+   "habitats": [
+    "pavilion"
+   ],
+   "theme": "Lễ hội",
+   "rarity": "rare",
+   "description": "Đậu trên mái ngói cổ, thuộc lòng mọi câu chuyện của khu phố.",
+   "line": "Hú... ta kể bạn nghe chuyện này.",
+   "art": {
+    "body": "#a0704a",
+    "accent": "#5c3b22",
+    "shape": "round",
+    "feature": "owl"
+   }
+  },
+  {
+   "id": "tho-hoa-giay",
+   "name": "Thỏ Hoa Giấy",
+   "habitats": [
+    "garden",
+    "plaza"
+   ],
+   "theme": "Cây",
+   "rarity": "common",
+   "description": "Tai mỏng như cánh hoa giấy, đổi màu theo mùa.",
+   "line": "Hít hít... thơm mùi hoa!",
+   "art": {
+    "body": "#f7c6d9",
+    "accent": "#e05a8a",
+    "shape": "round",
+    "feature": "rabbit"
+   }
+  }
+ ],
+ "items": [
+  {
+   "id": "la-bang",
+   "name": "Lá bàng đỏ",
+   "description": "Một chiếc lá bàng chuyển đỏ."
+  },
+  {
+   "id": "hat-sen",
+   "name": "Hạt sen",
+   "description": "Hạt sen tròn, dùng trang trí góc vườn sau này."
+  },
+  {
+   "id": "long-den",
+   "name": "Lồng đèn giấy",
+   "description": "Lồng đèn nhỏ ai đó để quên."
+  },
+  {
+   "id": "vo-oc",
+   "name": "Vỏ ốc xoắn",
+   "description": "Vỏ ốc rỗng còn ánh xà cừ."
+  },
+  {
+   "id": "hoa-giay",
+   "name": "Cánh hoa giấy",
+   "description": "Cánh hoa giấy hồng nhạt."
+  },
+  {
+   "id": "soi-cuoi",
+   "name": "Sỏi cuội",
+   "description": "Viên sỏi nhẵn từ lối đi."
+  }
+ ]
+}
