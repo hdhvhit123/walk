@@ -25,6 +25,18 @@ cd android && ./gradlew assembleRelease
 
 Hoặc chạy thẳng lên máy đang cắm cáp: `npm run android`.
 
+## Ngôi làng
+
+Phần thưởng của mỗi chuyến đi bộ hợp lệ được mang về làng (tab **Làng**):
+
+- **Lá**: 10 lá mỗi chuyến + 1 lá mỗi 20 m đi bộ được xác nhận + 20 lá khi gặp sinh vật mới.
+- **Vật phẩm** nhặt dọc tuyến (lá bàng, hạt sen, sỏi cuội…) cùng với lá dùng để xây 10 loại công trình: nhà nấm, cây đa, vườn hoa giấy, ao sen, quảng trường, đình nhỏ và đồ trang trí.
+- **Độ đẹp** của công trình đưa làng lên cấp (tối đa 6); mỗi cấp mở thêm một hàng và một cột đất (4×4 → 9×9) và công trình mới.
+- **Cư dân**: sinh vật đã gặp chuyển đến ở công trình hợp môi trường sống (ao sen cho sinh vật bờ hồ, cây đa cho sinh vật gốc cây; nhà nấm nhận mọi loài).
+- **Quà dân làng**: ngày nào có chuyến đi bộ hợp lệ, mỗi cư dân tặng 3 lá, nhận một lần mỗi ngày. Làng chỉ lớn lên nhờ đi bộ, không nhờ mở app.
+
+Số lá luôn được tính lại từ sổ nhận thưởng và danh sách công trình, nên không thể lệch hay bị cộng hai lần; mỗi lần xây được kiểm tra lại trong một giao dịch SQLite.
+
 ## Chế độ mô phỏng
 
 Không ra đường được? Vào **Cài đặt → Bật mô phỏng**, chọn nhiệm vụ, chọn kịch bản (đi bộ, đi ô tô rồi đi bộ, xe buýt kẹt, GPS nhảy, mất tín hiệu…) và tốc độ tua. Mô phỏng dùng cơ sở dữ liệu riêng (`walk-sim.db`), không lẫn vào bộ sưu tập thật.
@@ -33,8 +45,8 @@ Không ra đường được? Vào **Cài đặt → Bật mô phỏng**, chọn
 
 ```bash
 npm run typecheck
-npm test            # lõi xác minh: 221 test (15 kịch bản × nhiều tuyến × seed, nhiệm vụ, sổ thưởng…)
-npm run test:app    # cả app: 14 test trên màn hình thật, SQL thật, service Android giả lập
+npm test            # lõi xác minh + làng: 230 test (15 kịch bản × nhiều tuyến × seed, nhiệm vụ, sổ thưởng…)
+npm run test:app    # cả app: 17 test trên màn hình thật, SQL thật, service Android giả lập
 npm run test:native # biên dịch Kotlin + 14 test EventLog trên JVM (không cần Android SDK)
 ```
 
@@ -44,9 +56,9 @@ npm run test:native # biên dịch Kotlin + 14 test EventLog trên JVM (không c
 
 | Thư mục | Nội dung |
 | --- | --- |
-| `src/core` | Thuần TypeScript, dùng chung với bản web: quy tắc (`rules.ts`), bộ xác minh (`verify.ts`), nhiệm vụ, sổ thưởng, gói khu vực, mô phỏng |
+| `src/core` | Thuần TypeScript, dùng chung với bản web: quy tắc (`rules.ts`), bộ xác minh (`verify.ts`), nhiệm vụ, sổ thưởng, ngôi làng (`village.ts`), gói khu vực, mô phỏng |
 | `src/platform` | SQLite (`store.ts`), bộ ghi native / mô phỏng (`recorder.ts`), điều phối phiên và khôi phục (`session.ts`), quyền thiết bị, xuất log / dọn dẹp |
-| `src/ui` | 7 màn hình React Native; `src/App.tsx` là máy trạng thái gốc |
+| `src/ui` | 8 màn hình React Native; `src/App.tsx` là máy trạng thái gốc |
 | `modules/walk-sensors` | Module Expo viết bằng Kotlin: `WalkTrackingService` (foreground service loại location), `EventLog` (log JSON-lines theo phiên), `ActivityTransitionReceiver` |
 | `tests/unit`, `tests/app`, `tests/native` | Vitest, Jest + Testing Library, kiểm tra Kotlin |
 

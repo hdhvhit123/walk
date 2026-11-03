@@ -14,6 +14,7 @@ import { MissionMap } from './ui/MissionMap';
 import { Onboarding } from './ui/Onboarding';
 import { Settings } from './ui/Settings';
 import { Today } from './ui/Today';
+import { Village } from './ui/Village';
 import { Walking } from './ui/Walking';
 import { H1, P, Screen as Page } from './ui/kit';
 import { useTheme } from './ui/theme';
@@ -29,10 +30,11 @@ type Screen =
   | { name: 'walking'; ctrl: SessionController }
   | { name: 'encounter'; mission: Mission; result: FinishResult }
   | { name: 'collection' }
+  | { name: 'village' }
   | { name: 'settings' };
 
-type Tab = 'today' | 'collection' | 'settings';
-const TABS: { id: Tab; label: string }[] = [{ id: 'today', label: 'Hôm nay' }, { id: 'collection', label: 'Bộ sưu tập' }, { id: 'settings', label: 'Cài đặt' }];
+type Tab = 'today' | 'village' | 'collection' | 'settings';
+const TABS: { id: Tab; label: string }[] = [{ id: 'today', label: 'Hôm nay' }, { id: 'village', label: 'Làng' }, { id: 'collection', label: 'Sưu tập' }, { id: 'settings', label: 'Cài đặt' }];
 
 /**
  * Startup: the sim switch lives in the real database; pick the database, prune
@@ -84,13 +86,13 @@ function Shell() {
   }, [bootKey]);
 
   useEffect(() => {
-    if (screen.name === 'today' || screen.name === 'collection' || screen.name === 'settings') void reloadMeta();
+    if (screen.name === 'today' || screen.name === 'village' || screen.name === 'collection' || screen.name === 'settings') void reloadMeta();
   }, [screen.name, reloadMeta]);
 
   // Android back: map → today, tabs → today. Walking keeps the session (back leaves the app, recording continues).
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (screen.name === 'map' || screen.name === 'collection' || screen.name === 'settings' || screen.name === 'encounter') {
+      if (screen.name === 'map' || screen.name === 'village' || screen.name === 'collection' || screen.name === 'settings' || screen.name === 'encounter') {
         setScreen({ name: 'today' });
         return true;
       }
@@ -110,7 +112,7 @@ function Shell() {
   }
   if (bootError) return <Page><H1>Không mở được dữ liệu</H1><P>{bootError}</P></Page>;
 
-  const tab: Tab | null = screen.name === 'today' || screen.name === 'collection' || screen.name === 'settings' ? screen.name : null;
+  const tab: Tab | null = screen.name === 'today' || screen.name === 'village' || screen.name === 'collection' || screen.name === 'settings' ? screen.name : null;
 
   return (
     <View style={{ flex: 1, backgroundColor: t.bg, paddingTop: inset.top }}>
@@ -142,8 +144,9 @@ function Shell() {
         )}
         {screen.name === 'encounter' && (
           <Encounter pack={PACK} mission={screen.mission} result={screen.result}
-            onDone={(to) => setScreen(to === 'today' ? { name: 'today' } : { name: 'collection' })} />
+            onDone={(to) => setScreen({ name: to } as Screen)} />
         )}
+        {screen.name === 'village' && <Village pack={PACK} />}
         {screen.name === 'collection' && <Collection pack={PACK} />}
         {screen.name === 'settings' && (
           <Settings pack={PACK} meta={meta} sim={sim} onChanged={reloadMeta} onToggleSim={() => void toggleSim()}

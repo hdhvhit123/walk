@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import type { Mission } from '../core/missions';
 import type { AreaPack } from '../core/pack';
-import { collection } from '../platform/store';
+import { claimEarnings } from '../core/village';
+import { allClaims, collection } from '../platform/store';
 import type { FinishResult } from '../platform/session';
 import { CreatureArt } from './CreatureArt';
 import { Button, Card, H1, P, Row, Screen } from './kit';
@@ -13,14 +14,18 @@ import { shareCard } from './share';
 const TAPS = 3;
 
 export function Encounter({ pack, mission, result, onDone }: {
-  pack: AreaPack; mission: Mission; result: FinishResult; onDone: (to: 'today' | 'collection') => void;
+  pack: AreaPack; mission: Mission; result: FinishResult; onDone: (to: 'today' | 'collection' | 'village') => void;
 }) {
   const c = pack.creatures.find((x) => x.id === mission.creatureId)!;
   const [taps, setTaps] = useState(0);
   const [owned, setOwned] = useState(0);
   const [msg, setMsg] = useState('');
   const card = useRef<View>(null);
-  useEffect(() => { void collection().then((cs) => setOwned(cs.length)); }, []);
+  const [leaves, setLeaves] = useState(0);
+  useEffect(() => {
+    void collection().then((cs) => setOwned(cs.length));
+    void allClaims().then((cs) => setLeaves(claimEarnings(cs).find((e) => e.claimId === result.claim?.claimId)?.leaves ?? 0));
+  }, [result.claim?.claimId]);
   const items = (result.claim?.items ?? []).map((id) => pack.items.find((i) => i.id === id)).filter((x) => !!x);
   const met = taps >= TAPS;
 
@@ -52,12 +57,14 @@ export function Encounter({ pack, mission, result, onDone }: {
       <Card>
         <P>Đi bộ được xác nhận: {fmtM(result.snapshot.walkM)}</P>
         <P>Bộ sưu tập: {owned}/{pack.creatures.length}</P>
+        <P testID="leaves-earned">Nhận được: 🍃 {leaves} lá cho ngôi làng</P>
         {items.length > 0 && <P>Nhặt trên đường: {items.map((i) => i!.name).join(', ')}</P>}
       </Card>
       <Row>
         <Button title="Chia sẻ ảnh" onPress={share} testID="share" />
-        <Button kind="primary" title="Xem bộ sưu tập" onPress={() => onDone('collection')} testID="to-collection" />
+        <Button title="Xem bộ sưu tập" onPress={() => onDone('collection')} testID="to-collection" />
       </Row>
+      <Button kind="primary" title="Về làng xây dựng" onPress={() => onDone('village')} testID="to-village" />
       {!!msg && <P muted>{msg}</P>}
       <P muted small>Ảnh chia sẻ không chứa bản đồ, tuyến đường hay điểm xuất phát.</P>
       <Button kind="link" title="Về Hôm nay" onPress={() => onDone('today')} testID="to-today" />

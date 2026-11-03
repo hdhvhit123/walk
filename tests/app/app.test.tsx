@@ -91,6 +91,8 @@ describe('Android app, real-device path (fake foreground service)', () => {
     await screen.findByTestId('encounter');
     for (let i = 0; i < 3; i++) await tap('creature-tap');
     await screen.findByTestId('result');
+    // First meeting: 10 + 1 per 20 m + 20 bonus leaves for the village.
+    await waitFor(() => expect(within('leaves-earned')).toMatch(/🍃\s+\d{2,}/));
     await tap('share');
     expect(device.shared).toContain('file:///cache/share.png');
     await tap('to-collection');
@@ -242,6 +244,75 @@ describe('simulation mode', () => {
     expect(screen.queryByTestId('sim-banner')).toBeNull();
     fireEvent.press(screen.getByTestId('tab-collection')); await flush(10);
     expect(screen.queryAllByTestId('owned').length).toBe(0);
+  });
+});
+
+describe('village', () => {
+  async function seed() {
+    // One verified walk today (creature + items), written through the same claim path as a real walk.
+    await store.writeClaim({ claimId: 'm1', missionId: 'm1', sessionId: 's1', date: '2026-11-03', at: T0, creatureId: 'meo-may',
+      items: ['la-bang', 'la-bang', 'soi-cuoi'], walkM: 600, syncState: 'local' });
+  }
+
+  test('build with leaves + items, invite a creature, collect the daily gift', async () => {
+    await seed();
+    render(<App />);
+    await onboard();
+    await tap('tab-village');
+    // 10 + 600/20 + 20 first meeting = 60 leaves
+    expect(within('leaves')).toBe('60');
+    await tap('build-mushroom-house');
+    await tap('tile-1-1');
+    await screen.findByTestId('tile-mushroom-house');
+    expect(within('leaves')).toBe('30');
+    expect(within('build-mushroom-house')).toMatch(/Lá bàng đỏ 1\/1/);
+    // Locked building explains why.
+    await tap('build-lotus-pond');
+    expect(within('village-msg')).toMatch(/cấp/);
+    // Invite the creature we met.
+    await tap('tile-mushroom-house');
+    await tap('invite-meo-may');
+    expect(within('village-msg')).toMatch(/Mèo Mây đã chuyển đến/);
+    // A resident + a walk today = a gift, once.
+    await tap('collect-gift');
+    expect(within('leaves')).toBe('33');
+    expect(screen.queryByTestId('collect-gift')).toBeNull();
+    // Persisted: reopen the app and the village is still there.
+    screen.unmount();
+    render(<App />);
+    await screen.findByTestId('today');
+    await tap('tab-village');
+    await screen.findByTestId('tile-mushroom-house');
+    expect(within('leaves')).toBe('33');
+  });
+
+  test('cannot overspend: second house refused when leaves run out', async () => {
+    await seed();
+    render(<App />);
+    await onboard();
+    await tap('tab-village');
+    await tap('build-mushroom-house');
+    await tap('tile-0-0');
+    await tap('build-mushroom-house');
+    await tap('tile-0-1');
+    expect(within('leaves')).toBe('0');
+    await tap('build-mushroom-house');
+    expect(within('village-msg')).toMatch(/Chưa đủ/);
+    expect(screen.getAllByTestId('tile-mushroom-house').length).toBe(2);
+  });
+
+  test('move a building to another tile', async () => {
+    await seed();
+    render(<App />);
+    await onboard();
+    await tap('tab-village');
+    await tap('build-pebble-path');
+    await tap('tile-0-0');
+    await tap('tile-pebble-path');
+    await tap('move-building');
+    await tap('tile-3-3');
+    expect(screen.getByTestId('tile-0-0')).toBeTruthy();
+    expect(screen.queryByTestId('tile-3-3')).toBeNull();
   });
 });
 

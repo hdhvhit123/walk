@@ -6,7 +6,7 @@ import { DURATIONS, generateMissions, nearestHub, weeklyTheme, type Duration, ty
 import type { AreaPack } from '../core/pack';
 import { RULES } from '../core/rules';
 import type { LatLng } from '../core/geo';
-import { allClaims, allSessions, collection, saveOrLoadMissionSet, setMeta, type Meta } from '../platform/store';
+import { allClaims, allSessions, collection, saveOrLoadMissionSet, setMeta, village, type Meta } from '../platform/store';
 import { currentFix } from '../platform/device';
 import { CreatureArt } from './CreatureArt';
 import { Button, H1, Note, P, Pill, Row, Screen } from './kit';
@@ -24,7 +24,7 @@ export function Today({ pack, meta, sim, onPick }: { pack: AreaPack; meta: Meta;
   const t = useTheme();
   const [duration, setDuration] = useState<Duration>(20);
   const [pos, setPos] = useState<PosState>({ status: 'loading' });
-  const [info, setInfo] = useState<{ claimsToday: number; streak: number; owned: Set<string>; visits: { poiId: string; date: string }[]; clockOk: boolean } | null>(null);
+  const [info, setInfo] = useState<{ claimsToday: number; streak: number; owned: Set<string>; visits: { poiId: string; date: string }[]; clockOk: boolean; leaves: number; level: number } | null>(null);
   const [result, setResult] = useState<{ options: Mission[]; relaxed: boolean } | { error: string; shorter?: Duration } | null>(null);
   const date = localDate(Date.now());
 
@@ -43,12 +43,14 @@ export function Today({ pack, meta, sim, onPick }: { pack: AreaPack; meta: Meta;
       if (clock.ok) await setMeta('clockMax', clock.newMax);
       const claims = await allClaims();
       const sessions = await allSessions();
+      const vil = await village(date);
       setInfo({
         claimsToday: claims.filter((c) => c.date === date).length,
         streak: streak(claims.map((c) => c.date), date, addDays),
         owned: new Set((await collection()).map((c) => c.creatureId)),
         visits: sessions.filter((s) => s.status === 'completed').map((s) => ({ poiId: s.poiId, date: s.date })),
         clockOk: clock.ok,
+        leaves: vil.leaves, level: vil.level,
       });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,6 +81,7 @@ export function Today({ pack, meta, sim, onPick }: { pack: AreaPack; meta: Meta;
         <Pill>🔥 {info?.streak ?? 0} ngày</Pill>
         <Pill>Bộ sưu tập {info?.owned.size ?? 0}/{pack.creatures.length}</Pill>
         <Pill>{`Còn ${left} lượt thưởng`}</Pill>
+        <Pill>🍃 {info?.leaves ?? 0} · làng cấp {info?.level ?? 1}</Pill>
       </Row>
       <P muted small>Chủ đề tuần: {weeklyTheme(pack, date)} · {pack.name}{pack.sample ? ' · dữ liệu mẫu' : ''}</P>
       {info && !info.clockOk && <Note testID="clock-warning">Đồng hồ thiết bị đang chậm hơn lần dùng trước. Hãy bật ngày giờ tự động; nhận thưởng tạm khóa.</Note>}

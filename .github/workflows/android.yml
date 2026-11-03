@@ -19,7 +19,7 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run typecheck
-      - run: npm test          # verification core: 221 tests
+      - run: npm test          # verification core + village
       - run: npm run test:app  # whole app with fake native edges
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }

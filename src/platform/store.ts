@@ -5,6 +5,11 @@ import type { SensorEvent, Snapshot } from '../core/verify';
 import type { ReasonCode } from '../core/reasons';
 import type { ScenarioId } from '../core/sim';
 import { RULES } from '../core/rules';
+import {
+  canBuild, canMoveIn, giftAvailable, villageState,
+  type BuildingKind, type BuildProblem, type Gift, type MoveInProblem, type PlacedBuilding, type Resident, type VillageState,
+} from '../core/village';
+import type { Habitat } from '../core/pack';
 
 export type SessionStatus = 'active' | 'paused' | 'completed' | 'failed' | 'abandoned';
 
@@ -50,6 +55,9 @@ async function db() {
       CREATE TABLE IF NOT EXISTS claims (claim_id TEXT PRIMARY KEY, date TEXT NOT NULL, json TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS collection (creature_id TEXT PRIMARY KEY, first_at INTEGER NOT NULL, count INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS inventory (item_id TEXT PRIMARY KEY, count INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS village_buildings (id TEXT PRIMARY KEY, kind TEXT NOT NULL, x INTEGER NOT NULL, y INTEGER NOT NULL, built_at INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS village_residents (creature_id TEXT PRIMARY KEY, building_id TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS village_gifts (date TEXT PRIMARY KEY, leaves INTEGER NOT NULL);
     `);
     return d;
   })();
@@ -180,9 +188,79 @@ export async function wipeAll() {
   for (const sim of [false, true]) {
     useDatabase(sim);
     const d = await db();
-    await d.execAsync('DELETE FROM kv; DELETE FROM missions; DELETE FROM mission_sets; DELETE FROM sessions; DELETE FROM sim_events; DELETE FROM claims; DELETE FROM collection; DELETE FROM inventory;');
+    await d.execAsync('DELETE FROM kv; DELETE FROM missions; DELETE FROM mission_sets; DELETE FROM sessions; DELETE FROM sim_events; DELETE FROM claims; DELETE FROM collection; DELETE FROM inventory; DELETE FROM village_buildings; DELETE FROM village_residents; DELETE FROM village_gifts;');
   }
   useDatabase(false);
 }
 
 export function currentDatabase() { return currentName; }
+
+// ---- Village -------------------------------------------------------------
+
+type Q = Pick<SQLite.SQLiteDatabase, 'getAllAsync'>;
+
+async function villageInput(q: Q) {
+  const claims = parse<Claim>(await q.getAllAsync<{ json: string }>('SELECT json FROM claims ORDER BY date'));
+  const inventory = (await q.getAllAsync<{ item_id: string; count: number }>('SELECT * FROM inventory')).map((r) => ({ itemId: r.item_id, count: r.count }));
+  const buildings = (await q.getAllAsync<{ id: string; kind: BuildingKind; x: number; y: number; built_at: number }>('SELECT * FROM village_buildings ORDER BY built_at'))
+    .map((r): PlacedBuilding => ({ id: r.id, kind: r.kind, x: r.x, y: r.y, builtAt: r.built_at }));
+  const residents = (await q.getAllAsync<{ creature_id: string; building_id: string }>('SELECT * FROM village_residents'))
+    .map((r): Resident => ({ creatureId: r.creature_id, buildingId: r.building_id }));
+  const gifts = await q.getAllAsync<Gift>('SELECT date, leaves FROM village_gifts');
+  return { claims, inventory, buildings, residents, gifts };
+}
+
+export async function village(today: string): Promise<VillageState & { gift: number }> {
+  const input = await villageInput(await db());
+  return { ...villageState(input), gift: giftAvailable(input.claims, input.gifts, input.residents, today) };
+}
+
+/** Build atomically: the rules are re-checked inside the transaction, so a double tap cannot overspend. */
+export async function placeBuilding(kind: BuildingKind, x: number, y: number, now: number): Promise<BuildProblem | null> {
+  let problem: BuildProblem | null = null;
+  await transaction(async (tx) => {
+    problem = canBuild(villageState(await villageInput(tx)), kind, x, y);
+    if (problem) return;
+    await tx.runAsync('INSERT INTO village_buildings (id, kind, x, y, built_at) VALUES (?, ?, ?, ?, ?)', `b_${now.toString(36)}_${x}_${y}`, kind, x, y, now);
+  });
+  return problem;
+}
+
+export async function moveBuilding(id: string, x: number, y: number): Promise<boolean> {
+  let ok = false;
+  await transaction(async (tx) => {
+    const v = villageState(await villageInput(tx));
+    if (x < 0 || y < 0 || x >= v.size || y >= v.size || v.buildings.some((b) => b.x === x && b.y === y)) return;
+    await tx.runAsync('UPDATE village_buildings SET x = ?, y = ? WHERE id = ?', x, y, id);
+    ok = true;
+  });
+  return ok;
+}
+
+export async function moveIn(creature: { id: string; habitats: Habitat[] }, buildingId: string): Promise<MoveInProblem | null> {
+  let problem: MoveInProblem | null = null;
+  await transaction(async (tx) => {
+    const input = await villageInput(tx);
+    const b = input.buildings.find((x) => x.id === buildingId);
+    const owned = new Set((await tx.getAllAsync<{ creature_id: string }>('SELECT creature_id FROM collection')).map((r) => r.creature_id));
+    problem = b ? canMoveIn(villageState(input), b, creature, owned) : 'NOT_A_HOME';
+    if (problem) return;
+    await tx.runAsync('INSERT OR REPLACE INTO village_residents (creature_id, building_id) VALUES (?, ?)', creature.id, buildingId);
+  });
+  return problem;
+}
+
+export async function moveOut(creatureId: string) {
+  await (await db()).runAsync('DELETE FROM village_residents WHERE creature_id = ?', creatureId);
+}
+
+export async function collectGift(today: string): Promise<number> {
+  let leaves = 0;
+  await transaction(async (tx) => {
+    const input = await villageInput(tx);
+    leaves = giftAvailable(input.claims, input.gifts, input.residents, today);
+    if (leaves) await tx.runAsync('INSERT INTO village_gifts (date, leaves) VALUES (?, ?)', today, leaves);
+  });
+  return leaves;
+}
+

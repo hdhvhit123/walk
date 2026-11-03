@@ -59,7 +59,7 @@ export function Collection({ pack }: { pack: AreaPack }) {
         const it = pack.items.find((x) => x.id === i.itemId);
         return <Card key={i.itemId}><P><Text style={{ fontWeight: '700' }}>{it?.name}</Text> ×{i.count}</P><P small muted>{it?.description}</P></Card>;
       })}
-      <P muted small>Góc vườn để trang trí bằng vật phẩm sẽ mở ở bản sau, khi vòng đi bộ đã ổn định.</P>
+      <P muted small>Dùng vật phẩm và lá để xây công trình ở tab Làng; sinh vật đã gặp có thể chuyển đến ở.</P>
 
       <Modal visible={!!open} transparent animationType="fade" onRequestClose={() => setOpen(null)}>
         <View style={{ flex: 1, backgroundColor: '#0008', justifyContent: 'center', padding: 16 }}>
